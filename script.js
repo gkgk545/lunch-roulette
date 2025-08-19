@@ -39,7 +39,7 @@ function startSpin() {
 // 결과 처리 함수
 function alertPrize(indicatedSegment) {
     document.getElementById('result').innerText = `🎉 오늘의 점심은 "${indicatedSegment.text}" 🎉`;
-    document.getElementById('spin_button').innerText = '결과를 복사해 챗봇에 알려주세요!';
+    document.getElementById('spin_button').innerText = '버튼을 클릭해 결과 복사 후 챗봇에게 알려주세요!';
 }
 
 // 랜덤 색상 생성 함수
