@@ -15,7 +15,7 @@ const segments = getOptionsFromURL().map(option => ({'fillStyle': getRandomColor
 let theWheel = new Winwheel({
     'numSegments'  : segments.length,
     'outerRadius'  : 180,
-    'textFontSize' : 20,
+    'textFontSize' : 40,
     'segments'     : segments,
     'animation' : {
         'type'     : 'spinToStop',
