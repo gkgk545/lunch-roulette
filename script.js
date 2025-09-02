@@ -16,30 +16,60 @@ let theWheel = new Winwheel({
     'numSegments'  : segments.length,
     'outerRadius'  : 180,
     'textFontSize' : 40,
+    'textFontFamily': 'Noto Sans KR',
     'segments'     : segments,
     'animation' : {
         'type'     : 'spinToStop',
         'duration' : 5,
         'spins'    : 8,
-        'callbackFinished' : alertPrize,
+        'callbackFinished' : alertPrize, // 애니메이션 종료 후 alertPrize 함수 호출
     }
 });
 
-// 돌리기 버튼 비활성화를 위한 변수
+// 돌리기 버튼 상태를 관리하는 변수
 let wheelSpinning = false;
 
+// 룰렛 돌리기 함수
 function startSpin() {
     if (wheelSpinning == false) {
         theWheel.startAnimation();
         wheelSpinning = true;
-        document.getElementById('spin_button').disabled = true; // 버튼 비활성화
+        // 돌리는 동안 버튼을 비활성화합니다.
+        document.getElementById('spin_button').disabled = true;
     }
 }
 
-// 결과 처리 함수
+// 룰렛 결과 처리 함수
 function alertPrize(indicatedSegment) {
-    document.getElementById('result').innerText = `🎉 오늘의 점심은 "${indicatedSegment.text}" 🎉`;
-    document.getElementById('spin_button').innerText = '버튼을 클릭해 결과 복사 후 챗봇에게 알려주세요!';
+    const resultText = indicatedSegment.text;
+    const spinButton = document.getElementById('spin_button');
+
+    // 1. 결과 텍스트 표시
+    document.getElementById('result').innerText = `🎉 오늘의 점심은 "${resultText}" 🎉`;
+
+    // 2. 버튼의 텍스트와 기능을 변경
+    spinButton.innerText = '버튼을 클릭해 결과 복사 후 챗봇에게 알려주세요!';
+    spinButton.disabled = false; // 버튼을 다시 활성화
+
+    // 3. 버튼의 클릭 이벤트를 '복사 후 닫기' 기능으로 교체
+    spinButton.onclick = function() {
+        // 클립보드에 복사할 텍스트
+        const textToCopy = `오늘의 점심 메뉴는 "${resultText}" 입니다!`;
+
+        navigator.clipboard.writeText(textToCopy)
+            .then(() => {
+                // 복사 성공 시
+                alert('결과가 클립보드에 복사되었습니다.');
+                window.close(); // 현재 창 닫기
+            })
+            .catch(err => {
+                // 복사 실패 시 (예: 사용자가 권한 거부)
+                console.error('클립보드 복사 실패: ', err);
+                alert('결과 복사에 실패했습니다. 다시 시도해주세요.');
+                // 실패하더라도 창은 닫도록 설정 (선택 사항)
+                // window.close();
+            });
+    };
 }
 
 // 랜덤 색상 생성 함수
