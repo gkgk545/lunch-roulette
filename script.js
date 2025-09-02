@@ -39,36 +39,42 @@ function startSpin() {
     }
 }
 
-// 룰렛 결과 처리 함수
+// 룰렛 결과 처리 함수 (클릭 단계 분리 버전)
 function alertPrize(indicatedSegment) {
     const resultText = indicatedSegment.text;
     const spinButton = document.getElementById('spin_button');
 
-    // 1. 결과 텍스트 표시
+    // 1. 화면에 결과 표시
     document.getElementById('result').innerText = `🎉 오늘의 점심은 "${resultText}" 🎉`;
+    spinButton.disabled = false; // 버튼 다시 활성화
 
-    // 2. 버튼의 텍스트와 기능을 변경
-    spinButton.innerText = '버튼을 클릭해 결과 복사 후 챗봇에게 알려주세요!';
-    spinButton.disabled = false; // 버튼을 다시 활성화
-
-    // 3. 버튼의 클릭 이벤트를 '복사 후 닫기' 기능으로 교체
+    // 2. [1단계] 버튼을 '결과 복사하기' 상태로 변경
+    spinButton.innerText = '결과 복사하기';
     spinButton.onclick = function() {
-        // 클립보드에 복사할 텍스트
         const textToCopy = `오늘의 점심 메뉴는 "${resultText}" 입니다!`;
 
-        navigator.clipboard.writeText(textToCopy)
-            .then(() => {
-                // 복사 성공 시
-                alert('결과가 클립보드에 복사되었습니다.');
-                window.close(); // 현재 창 닫기
-            })
-            .catch(err => {
-                // 복사 실패 시 (예: 사용자가 권한 거부)
-                console.error('클립보드 복사 실패: ', err);
-                alert('결과 복사에 실패했습니다. 다시 시도해주세요.');
-                // 실패하더라도 창은 닫도록 설정 (선택 사항)
-                // window.close();
-            });
+        // 클립보드에 텍스트 복사
+        navigator.clipboard.writeText(textToCopy).then(() => {
+            alert('결과가 클립보드에 복사되었습니다.');
+            
+            // 3. [2단계] 복사 성공 후, 버튼을 '다시 돌리기' 상태로 변경
+            spinButton.innerText = '다시 돌리기';
+            spinButton.onclick = function() {
+                
+                // 4. [초기화] 룰렛과 버튼을 모두 원래 상태로 되돌림
+                theWheel.stopAnimation(false);  // 현재 애니메이션 정지
+                theWheel.rotationAngle = 0;     // 룰렛 각도 초기화
+                theWheel.draw();                // 룰렛 다시 그리기
+
+                wheelSpinning = false;          // 다시 돌릴 수 있도록 상태 변경
+                spinButton.innerText = '룰렛 돌리기!';
+                spinButton.onclick = startSpin; // 버튼 이벤트를 원래의 startSpin으로 복구
+                document.getElementById('result').innerText = ''; // 결과 텍스트 지우기
+            };
+        }).catch(err => {
+            console.error('클립보드 복사 실패: ', err);
+            alert('결과 복사에 실패했습니다.');
+        });
     };
 }
 
