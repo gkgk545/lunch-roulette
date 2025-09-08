@@ -8,14 +8,36 @@ function getOptionsFromURL() {
     return ['선택지 없음']; // 기본값
 }
 
-// 룰렛 옵션 배열 생성
-const segments = getOptionsFromURL().map(option => ({'fillStyle': getRandomColor(), 'text': option}));
+// ▼▼▼ 추가된 기능 ▼▼▼
+// 텍스트 길이에 따라 적절한 폰트 크기를 계산하는 함수
+function calculateFontSize(text) {
+    const len = text.length;
+    if (len <= 4) {
+        return 40; // 4글자 이하: 기본 크기
+    } else if (len <= 6) {
+        return 30; // 5~6글자
+    } else if (len <= 8) {
+        return 24; // 7~8글자
+    } else {
+        return 18; // 9글자 이상
+    }
+}
+// ▲▲▲ 추가된 기능 ▲▲▲
+
+// ▼▼▼ 변경된 부분 ▼▼▼
+// 룰렛 옵션 배열 생성 시, 각 옵션에 동적 폰트 크기 적용
+const segments = getOptionsFromURL().map(option => ({
+    'fillStyle': getRandomColor(),
+    'text': option,
+    'textFontSize': calculateFontSize(option) // 동적으로 폰트 크기 할당
+}));
+// ▲▲▲ 변경된 부분 ▲▲▲
 
 // 룰렛 생성
 let theWheel = new Winwheel({
     'numSegments'  : segments.length,
     'outerRadius'  : 180,
-    'textFontSize' : 40,
+    // 'textFontSize' : 40, // 전역 폰트 크기 설정 제거 (각 segment에서 개별 설정)
     'textFontFamily': 'Noto Sans KR',
     'segments'     : segments,
     'animation' : {
