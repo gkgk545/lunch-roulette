@@ -45,7 +45,7 @@ function alertPrize(indicatedSegment) {
     const spinButton = document.getElementById('spin_button');
 
     // 1. 결과 텍스트 표시
-    document.getElementById('result').innerText = `${resultText}`;
+    document.getElementById('result').innerText = `🎉 오늘의 점심 메뉴는 "${resultText}" 입니다! 🎉`;
 
     // 2. 버튼의 텍스트와 기능을 변경
     spinButton.innerText = '버튼을 클릭해 결과 복사 후 챗봇에게 알려주세요!';
@@ -54,7 +54,7 @@ function alertPrize(indicatedSegment) {
     // 3. 버튼의 클릭 이벤트를 '복사 후 닫기' 기능으로 교체
     spinButton.onclick = function() {
         // 클립보드에 복사할 텍스트
-        const textToCopy = `오늘의 점심 메뉴는 "${resultText}" 입니다!`;
+        const textToCopy = `${resultText}`;
 
         navigator.clipboard.writeText(textToCopy)
             .then(() => {
