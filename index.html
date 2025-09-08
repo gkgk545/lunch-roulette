@@ -30,7 +30,7 @@
         position: relative;
         width: 416px; /* 캔버스 너비 400px + 테두리 8px * 2 */
         height: 416px;
-        margin: 0 auto;
+        margin: 0 auto 20px; /* 룰렛과 버튼 사이 간격 추가 */
     }
     /* CSS로 만든 포인터 (화살표) */
     .wheel-container::after {
@@ -58,7 +58,7 @@
     #spin_button {
         font-size: 1.8em;
         padding: 15px 35px;
-        margin-top: 40px;
+        margin-top: 20px; /* 상단 마진 조정 */
         cursor: pointer;
         background-color: #28a745;
         color: white;
@@ -102,8 +102,10 @@
 </head>
 <body>
     <h1>오늘의 점심은?</h1>
-    <canvas id='canvas' width='400' height='400'></canvas>
-    <br />
+    
+    <div class="wheel-container">
+        <canvas id='canvas' width='400' height='400'></canvas>
+    </div>
     <button id='spin_button' onClick="startSpin();">룰렛 돌리기!</button>
     <div id="result"></div>
 
