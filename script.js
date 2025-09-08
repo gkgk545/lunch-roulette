@@ -45,7 +45,7 @@ function alertPrize(indicatedSegment) {
     const spinButton = document.getElementById('spin_button');
 
     // 1. 결과 텍스트 표시
-    document.getElementById('result').innerText = `🎉 오늘의 점심은 "${resultText}" 🎉`;
+    document.getElementById('result').innerText = `${resultText}`;
 
     // 2. 버튼의 텍스트와 기능을 변경
     spinButton.innerText = '버튼을 클릭해 결과 복사 후 챗봇에게 알려주세요!';
